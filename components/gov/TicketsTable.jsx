@@ -54,6 +54,7 @@ export default function TicketsTable({ tickets = [] }) {
           <thead>
             <tr className="border-b border-dark-border">
               <th className="text-left py-3 px-4 text-gray-400 font-semibold">Ticket ID</th>
+              <th className="text-left py-3 px-4 text-gray-400 font-semibold">Applicant</th>
               <th className="text-left py-3 px-4 text-gray-400 font-semibold">Village</th>
               <th className="text-left py-3 px-4 text-gray-400 font-semibold">Issue Type</th>
               <th className="text-left py-3 px-4 text-gray-400 font-semibold">Priority</th>
@@ -71,14 +72,24 @@ export default function TicketsTable({ tickets = [] }) {
                   className={`border-b border-dark-border hover:bg-dark-border/50 transition-colors ${getPriorityColor(ticket.priority)}`}
                 >
                   <td className="py-3 px-4 font-mono text-accent-cyan">{ticket.id}</td>
+
+                  {/* 👇 Applicant Name */}
+                  <td className="py-3 px-4 font-semibold text-white">
+                    {ticket.applicantName || '—'}
+                  </td>
+
                   <td className="py-3 px-4 font-semibold">{ticket.village}</td>
                   <td className="py-3 px-4">{ticket.issueType}</td>
                   <td className="py-3 px-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
-                      ticket.priority === 'critical' ? 'bg-risk-red/30 text-risk-red' :
-                      ticket.priority === 'high' ? 'bg-risk-orange/30 text-risk-orange' :
-                      'bg-accent-blue/30 text-accent-blue'
-                    }`}>
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
+                        ticket.priority === 'critical'
+                          ? 'bg-risk-red/30 text-risk-red'
+                          : ticket.priority === 'high'
+                          ? 'bg-risk-orange/30 text-risk-orange'
+                          : 'bg-accent-blue/30 text-accent-blue'
+                      }`}
+                    >
                       {ticket.priority}
                     </span>
                   </td>
@@ -121,38 +132,32 @@ export default function TicketsTable({ tickets = [] }) {
         </table>
       </div>
 
-      {/* Expanded Ticket Details */}
       {selectedTicket && (
         <div className="mt-6 p-4 bg-dark-border/30 rounded-lg border border-dark-border">
-          <h3 className="text-lg font-bold text-accent-cyan mb-4">Ticket Details: {selectedTicket.id}</h3>
+          <h3 className="text-lg font-bold text-accent-cyan mb-4">
+            Ticket Details: {selectedTicket.id}
+          </h3>
 
           <div className="grid grid-cols-2 gap-4 mb-6">
             <div>
-              <p className="text-gray-400 text-sm mb-1">Notes</p>
-              <p className="text-white">{selectedTicket.notes}</p>
+              <p className="text-gray-400 text-sm mb-1">Applicant</p>
+              <p className="text-white font-semibold">
+                {selectedTicket.applicantName || '—'}
+              </p>
             </div>
+
             <div>
               <p className="text-gray-400 text-sm mb-1">Created</p>
               <p className="text-white">
-                {selectedTicket.createdAt.toLocaleDateString()} {selectedTicket.createdAt.toLocaleTimeString()}
+                {selectedTicket.createdAt.toLocaleDateString()}{' '}
+                {selectedTicket.createdAt.toLocaleTimeString()}
               </p>
             </div>
-          </div>
 
-          <div className="flex gap-3">
-            <select
-              onChange={(e) => handleStatusChange(selectedTicket.id, e.target.value)}
-              defaultValue={selectedTicket.status}
-              className="bg-dark-border border border-dark-border rounded px-3 py-2 text-white text-sm hover:border-accent-blue transition-colors"
-            >
-              <option value="pending">Pending</option>
-              <option value="assigned">Assigned</option>
-              <option value="inspecting">Inspecting</option>
-              <option value="resolved">Resolved</option>
-            </select>
-            <button className="px-4 py-2 bg-accent-blue/20 hover:bg-accent-blue/30 text-accent-blue rounded transition-colors font-semibold">
-              Save Changes
-            </button>
+            <div className="col-span-2">
+              <p className="text-gray-400 text-sm mb-1">Notes</p>
+              <p className="text-white">{selectedTicket.notes}</p>
+            </div>
           </div>
         </div>
       )}

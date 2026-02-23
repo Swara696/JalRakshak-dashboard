@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 
 export default function Sidebar({ activeTab, setActiveTab }) {
@@ -12,54 +11,61 @@ export default function Sidebar({ activeTab, setActiveTab }) {
   ]
 
   return (
-    <aside className="fixed left-0 top-16 h-screen w-20 bg-gradient-to-b from-[#0B1220] to-[#121A2F] border-r border-cyan-500/20 flex flex-col items-center py-6 gap-4 z-30">
-      {tabs.map((tab) => (
-        <button
-          key={tab.id}
-          onClick={() => setActiveTab(tab.id)}
-          className={`
-            w-16 h-16 rounded-lg flex flex-col items-center justify-center gap-1
-            transition-all duration-300 relative group
-            ${
-              activeTab === tab.id
-                ? 'bg-gradient-to-br from-cyan-500/40 to-blue-500/40 border border-cyan-400/50 shadow-lg shadow-cyan-500/30'
-                : 'bg-[#121A2F]/50 border border-transparent hover:border-cyan-500/30 hover:bg-[#121A2F]'
-            }
-          `}
-          title={tab.label}
-        >
-          <span className="text-2xl">{tab.icon}</span>
-          <span className={`text-xs font-bold ${activeTab === tab.id ? 'text-cyan-400' : 'text-gray-400'}`}>
-            {tab.label.split(' ')[0]}
-          </span>
+    <aside className="fixed left-4 top-24 h-[calc(100vh-7rem)] w-20 glass-effect glow-border rounded-2xl flex flex-col items-center py-5 gap-4 z-30">
+      {tabs.map((tab) => {
+        const isActive = activeTab === tab.id
+        return (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            title={tab.label}
+            className={`
+              relative group w-14 h-14 rounded-2xl flex flex-col items-center justify-center gap-1
+              transition-all duration-300
+              ${isActive
+                ? 'bg-cyan-500/20 text-cyan-300 ring-1 ring-cyan-400/50 shadow-lg shadow-cyan-500/40 scale-105'
+                : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-cyan-300'}
+            `}
+          >
+            {/* Glow halo */}
+            {isActive && (
+              <span className="absolute inset-0 rounded-2xl bg-cyan-500/20 blur-lg -z-10" />
+            )}
 
-          {/* Tooltip on hover */}
-          <div className="absolute left-full ml-2 px-3 py-1 bg-[#121A2F] border border-cyan-500/50 rounded text-xs text-cyan-300 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-            {tab.label}
-          </div>
-        </button>
-      ))}
+            <span className="text-2xl">{tab.icon}</span>
+            <span className={`text-[10px] font-bold tracking-wide ${isActive ? 'text-cyan-300' : 'text-gray-400'}`}>
+              {tab.label.split(' ')[0]}
+            </span>
 
-      {/* Navigation Link to Area Monitor */}
+            {/* Tooltip */}
+            <div className="absolute left-full ml-3 px-3 py-1 rounded-full glass-effect text-xs text-cyan-300 whitespace-nowrap opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 transition-all pointer-events-none">
+              {tab.label}
+            </div>
+          </button>
+        )
+      })}
+
+      {/* Area Monitor */}
       <Link
         href="/area-monitor"
-        className="w-16 h-16 rounded-lg flex flex-col items-center justify-center gap-1 transition-all duration-300 relative group bg-[#121A2F]/50 border border-transparent hover:border-purple-500/30 hover:bg-[#121A2F]"
         title="Area Monitor"
+        className="relative group w-14 h-14 rounded-2xl flex flex-col items-center justify-center gap-1 bg-white/5 text-purple-300 hover:bg-purple-500/10 hover:text-purple-300 transition-all"
       >
         <span className="text-2xl">📍</span>
-        <span className="text-xs font-bold text-gray-400">Areas</span>
+        <span className="text-[10px] font-bold tracking-wide">Areas</span>
 
-        {/* Tooltip on hover */}
-        <div className="absolute left-full ml-2 px-3 py-1 bg-[#121A2F] border border-purple-500/50 rounded text-xs text-purple-300 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+        <div className="absolute left-full ml-3 px-3 py-1 rounded-full glass-effect text-xs text-purple-300 whitespace-nowrap opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 transition-all pointer-events-none">
           Area Monitor
         </div>
       </Link>
 
-      {/* Bottom spacer */}
       <div className="flex-1" />
 
-      {/* Settings button */}
-      <button className="w-16 h-16 rounded-lg flex items-center justify-center text-2xl hover:bg-[#121A2F]/80 border border-transparent hover:border-cyan-500/30 transition-all">
+      {/* Settings */}
+      <button
+        title="Settings"
+        className="w-12 h-12 rounded-xl flex items-center justify-center text-xl text-gray-400 hover:text-cyan-300 hover:bg-white/10 transition-all"
+      >
         ⚙️
       </button>
     </aside>

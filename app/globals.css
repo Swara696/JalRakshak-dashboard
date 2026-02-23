@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --cyan-glow: rgba(34, 211, 238, 0.4);
+  --blue-glow: rgba(59, 130, 246, 0.4);
+  --deep-bg: #030712;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -10,53 +16,135 @@
 
 html {
   scroll-behavior: smooth;
+  background-color: var(--deep-bg);
 }
 
 body {
-  @apply bg-[#0B1220] text-gray-100 font-sans;
-  background-image: radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-                    radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 50%);
+  @apply text-slate-200 font-sans antialiased;
+  background: 
+    radial-gradient(circle at 0% 0%, rgba(34, 211, 238, 0.08) 0%, transparent 35%),
+    radial-gradient(circle at 100% 100%, rgba(99, 102, 241, 0.08) 0%, transparent 35%),
+    #050810;
+  min-height: 100vh;
 }
 
+/* Digital Scanline & Grid Effect */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: 
+    linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  mask-image: radial-gradient(circle at center, black, transparent 80%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Custom Futuristic Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
 }
-
 ::-webkit-scrollbar-track {
-  @apply bg-[#0B1220];
+  background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
-  @apply bg-[#1a2a4a] rounded-lg;
+  background: linear-gradient(to bottom, transparent, #22d3ee, #3b82f6, transparent);
+  border-radius: 10px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-600;
-}
-
+/* Optimized Glassmorphism */
 .glass-effect {
-  @apply bg-gradient-glass backdrop-blur-xl border border-cyan-500/20 rounded-lg;
+  @apply rounded-2xl border border-white/10 backdrop-blur-md;
+  background: rgba(15, 23, 42, 0.6);
+  box-shadow: 
+    0 4px 24px -1px rgba(0, 0, 0, 0.2),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .glass-card {
-  @apply glass-effect p-6 shadow-2xl shadow-black/20 hover:shadow-cyan-500/10 transition-shadow duration-300;
+  @apply glass-effect p-6 transition-all duration-500 relative overflow-hidden;
 }
 
-.badge-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+/* Interactive Hover State - Adding a "Sheen" */
+.glass-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.05),
+    transparent
+  );
+  transition: 0.5s;
 }
 
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
+.glass-card:hover {
+  @apply border-cyan-500/40;
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -20px rgba(34, 211, 238, 0.3);
 }
 
+.glass-card:hover::before {
+  left: 100%;
+}
+
+/* Cinematic Gradient Text */
 .grad-text {
-  @apply bg-gradient-to-r from-cyan-400 via-blue-400 to-blue-500 bg-clip-text text-transparent;
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 via-blue-500 to-indigo-400;
+  filter: drop-shadow(0 2px 8px rgba(34, 211, 238, 0.3));
 }
 
+/* Realistic Hardware Status Dots */
+.pulse-dot {
+  @apply relative flex h-3 w-3;
+}
+
+.pulse-dot::before {
+  content: "";
+  @apply absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping;
+  background-color: inherit; /* Will inherit from parent utility like bg-green-500 */
+}
+
+.pulse-dot::after {
+  content: "";
+  @apply relative inline-flex rounded-full h-3 w-3;
+  background-color: inherit;
+}
+
+/* Floating Animation for simulation elements */
+.float {
+  animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Scanning Line Effect (Good for Alerts) */
+.scanning-line {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanning-line::after {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, rgba(34, 211, 238, 0.1), transparent);
+  animation: scan 3s linear infinite;
+}
+
+@keyframes scan {
+  0% { top: -100%; }
+  100% { top: 100%; }
+}

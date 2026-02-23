@@ -1,8 +1,15 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { formatTime } from '@/lib/mockData'
 
 export default function PublicHealthFeed({ reports = [] }) {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   const getSeverityColor = (severity) => {
     switch (severity) {
       case 'high':
@@ -55,13 +62,22 @@ export default function PublicHealthFeed({ reports = [] }) {
                       {report.village}
                     </span>
                   </div>
-                  <p className="text-sm text-gray-400">{formatTime(report.timestamp)}</p>
+
+                  {/* ⬇️ FIXED: render time only after mount */}
+                  <p className="text-sm text-gray-400">
+                    {mounted ? formatTime(report.timestamp) : ''}
+                  </p>
                 </div>
-                <span className={`px-3 py-1 rounded-lg text-xs font-bold ${
-                  report.severity === 'high' ? 'bg-risk-red/30 text-risk-red' :
-                  report.severity === 'medium' ? 'bg-risk-orange/30 text-risk-orange' :
-                  'bg-risk-green/30 text-risk-green'
-                }`}>
+
+                <span
+                  className={`px-3 py-1 rounded-lg text-xs font-bold ${
+                    report.severity === 'high'
+                      ? 'bg-risk-red/30 text-risk-red'
+                      : report.severity === 'medium'
+                      ? 'bg-risk-orange/30 text-risk-orange'
+                      : 'bg-risk-green/30 text-risk-green'
+                  }`}
+                >
                   {getSeverityBadge(report.severity)}
                 </span>
               </div>
